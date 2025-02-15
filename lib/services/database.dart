@@ -3,69 +3,55 @@ import 'package:sqflite/sqflite.dart';
 import '../data/models.dart';
 
 class NotesDatabaseService {
-  late String path;
+  static final NotesDatabaseService db = NotesDatabaseService._();
+  Database? _database;
 
   NotesDatabaseService._();
 
-  static final NotesDatabaseService db = NotesDatabaseService._();
-
-  late Database _database;
-
   Future<Database> get database async {
-    return _database;
-    // if _database is null we instantiate it
-    _database = await init();
-    return _database;
+    if (_database != null) return _database!;
+    _database = await _initDatabase();
+    return _database!;
   }
 
-  init() async {
-    String path = await getDatabasesPath();
-    path = join(path, 'notes.db');
-    print("Entered path $path");
-
-    return await openDatabase(path, version: 1,
-        onCreate: (Database db, int version) async {
-      await db.execute(
-          'CREATE TABLE Notes (_id INTEGER PRIMARY KEY, title TEXT, content TEXT, date TEXT, isImportant INTEGER);');
-      print('New table created at $path');
-    });
+  Future<Database> _initDatabase() async {
+    String path = join(await getDatabasesPath(), 'notes.db');
+    return await openDatabase(
+      path,
+      version: 1,
+      onCreate: (Database db, int version) async {
+        await db.execute(
+          'CREATE TABLE Notes (id INTEGER PRIMARY KEY, title TEXT, content TEXT, date TEXT, isImportant INTEGER);',
+        );
+      },
+    );
   }
 
   Future<List<NotesModel>> getNotesFromDB() async {
     final db = await database;
-    List<NotesModel> notesList = [];
-    List<Map<String, dynamic>> maps = await db.query('Notes',
-        columns: ['_id', 'title', 'content', 'date', 'isImportant']);
-    if (maps.isNotEmpty) {
-      for (var map in maps) {
-        notesList.add(NotesModel.fromMap(map));
-      }
-    }
-    return notesList;
+    final List<Map<String, dynamic>> maps = await db.query('Notes');
+    return List.generate(maps.length, (i) => NotesModel.fromMap(maps[i]));
   }
 
-  updateNoteInDB(NotesModel updatedNote) async {
+  Future<void> updateNoteInDB(NotesModel updatedNote) async {
     final db = await database;
     await db.update('Notes', updatedNote.toMap(),
-        where: '_id = ?', whereArgs: [updatedNote.id]);
-    print('Note updated: ${updatedNote.title} ${updatedNote.content}');
+        where: 'id = ?', whereArgs: [updatedNote.id]);
   }
 
-  deleteNoteInDB(NotesModel noteToDelete) async {
+  Future<void> deleteNoteInDB(NotesModel noteToDelete) async {
     final db = await database;
-    await db.delete('Notes', where: '_id = ?', whereArgs: [noteToDelete.id]);
-    print('Note deleted');
+    await db.delete('Notes', where: 'id = ?', whereArgs: [noteToDelete.id]);
   }
 
-  // Future<NotesModel> addNoteInDB(NotesModel newNote) async {
-  // final db = await database;
-  // if (newNote.title.trim().isEmpty) newNote.title = 'Untitled Note';
-  // int id = await db.transaction((transaction) {
-  //   transaction.rawInsert(
-  //       'INSERT into Notes(title, content, date, isImportant) VALUES ("${newNote.title}", "${newNote.content}", "${newNote.date.toIso8601String()}", ${newNote.isImportant == true ? 1 : 0});');
-  // });
-  // newNote.id = id;
-  // print('Note added: ${newNote.title} ${newNote.content}');
-  // return newNote;
-  // }
+  Future<NotesModel> addNoteInDB(NotesModel newNote) async {
+    final db = await database;
+    int id = await db.insert('Notes', {
+      'title': newNote.title,
+      'content': newNote.content,
+      'date': newNote.date.toIso8601String(),
+      'isImportant': newNote.isImportant ? 1 : 0
+    });
+    return newNote;
+  }
 }

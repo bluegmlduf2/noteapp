@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
-Color primaryColor = Color.fromARGB(255, 58, 149, 255);
-Color reallyLightGrey = Colors.grey.withAlpha(25);
+Color primaryColor = Colors.blue;
 ThemeData appThemeLight =
     ThemeData.light().copyWith(primaryColor: primaryColor);
+ThemeData appThemeDark = ThemeData.dark().copyWith(
+  primaryColor: Colors.white,
+  colorScheme: ColorScheme.dark(primary: primaryColor),
+);
