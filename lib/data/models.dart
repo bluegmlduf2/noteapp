@@ -1,14 +1,14 @@
 import 'dart:math';
 
 class NotesModel {
-  int id;
+  int? id;
   String title;
   String content;
   bool isImportant;
   DateTime date;
 
   NotesModel({
-    required this.id,
+    this.id,
     required this.title,
     required this.content,
     required this.isImportant,

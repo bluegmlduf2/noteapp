@@ -8,6 +8,7 @@ class NotesDatabaseService {
 
   NotesDatabaseService._();
 
+  // 데이터베이스 게터 (함수가아닌 게터사용이유는 게터는 호출시괄호가 필요없이 읽기전용이기때문에)
   Future<Database> get database async {
     if (_database != null) return _database!;
     _database = await _initDatabase();

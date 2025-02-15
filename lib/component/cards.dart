@@ -12,7 +12,6 @@ class NoteCardComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String neatDate = DateFormat.yMd().add_jm().format(noteData.date);
-    Color color = _getColor(noteData.title);
     return GestureDetector(
       onTap: () => onTapAction(noteData),
       child: Card(

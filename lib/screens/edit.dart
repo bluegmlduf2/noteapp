@@ -6,8 +6,11 @@ class EditNotePage extends StatefulWidget {
   final Function() triggerRefetch;
   final NotesModel? existingNote;
 
-  const EditNotePage(
-      {super.key, required this.triggerRefetch, this.existingNote});
+  const EditNotePage({
+    super.key,
+    required this.triggerRefetch,
+    this.existingNote,
+  });
 
   @override
   _EditNotePageState createState() => _EditNotePageState();
@@ -15,7 +18,6 @@ class EditNotePage extends StatefulWidget {
 
 class _EditNotePageState extends State<EditNotePage> {
   late NotesModel currentNote;
-  late TextEditingController titleController;
   late TextEditingController contentController;
 
   @override
@@ -23,13 +25,42 @@ class _EditNotePageState extends State<EditNotePage> {
     super.initState();
     currentNote = widget.existingNote ??
         NotesModel(
-            id: 0,
-            title: '',
-            content: '',
-            isImportant: false,
-            date: DateTime.now());
-    titleController = TextEditingController(text: currentNote.title);
+          title: '',
+          content: '',
+          isImportant: false,
+          date: DateTime.now(),
+        );
+
     contentController = TextEditingController(text: currentNote.content);
+  }
+
+  void _saveNote() async {
+    if (contentController.text.isEmpty) {
+      return;
+    }
+    // 저장한 메모의 상태저장
+    setState(() {
+      currentNote.content = contentController.text;
+    });
+
+    if (widget.existingNote == null) {
+      await NotesDatabaseService.db.addNoteInDB(currentNote);
+    } else {
+      await NotesDatabaseService.db.updateNoteInDB(currentNote);
+    }
+
+    // 메모 리스트 새롭게 받아오기
+    widget.triggerRefetch();
+    // 홈화면 이동
+    Navigator.pop(context);
+  }
+
+  void _deleteNote() async {
+    if (widget.existingNote != null) {
+      await NotesDatabaseService.db.deleteNoteInDB(currentNote);
+      widget.triggerRefetch();
+    }
+    Navigator.pop(context);
   }
 
   @override
@@ -41,27 +72,42 @@ class _EditNotePageState extends State<EditNotePage> {
         child: Column(
           children: [
             TextField(
-                controller: titleController,
-                decoration: const InputDecoration(labelText: 'Title')),
-            TextField(
-                controller: contentController,
-                decoration: const InputDecoration(labelText: 'Content')),
-            ElevatedButton(onPressed: _saveNote, child: const Text('Save')),
+              controller: contentController,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: 'Enter Content',
+              ),
+              keyboardType: TextInputType.multiline,
+              minLines: 3,
+              maxLines: 10,
+            ),
+            const SizedBox(height: 16),
+            Wrap(
+              spacing: 16,
+              alignment: WrapAlignment.center, // 중앙 정렬
+              children: [
+                if (widget.existingNote != null)
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
+                      foregroundColor: Colors.white,
+                    ),
+                    onPressed: _deleteNote,
+                    child: const Text('Delete'),
+                  ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    foregroundColor: Colors.white,
+                  ),
+                  onPressed: _saveNote,
+                  child: const Text('Save'),
+                ),
+              ],
+            ),
           ],
         ),
       ),
     );
-  }
-
-  void _saveNote() async {
-    currentNote.title = titleController.text;
-    currentNote.content = contentController.text;
-    if (widget.existingNote == null) {
-      await NotesDatabaseService.db.addNoteInDB(currentNote);
-    } else {
-      await NotesDatabaseService.db.updateNoteInDB(currentNote);
-    }
-    widget.triggerRefetch();
-    Navigator.pop(context);
   }
 }

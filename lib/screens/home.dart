@@ -24,6 +24,19 @@ class _MyHomePageState extends State<MyHomePage> {
     setNotesFromDB();
   }
 
+  void _openNote(NotesModel note) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditNotePage(
+          existingNote: note,
+          triggerRefetch: setNotesFromDB,
+        ),
+      ),
+    );
+  }
+
+  // 메모 리스트 새롭게 받아오기
   Future<void> setNotesFromDB() async {
     List<NotesModel> fetchedNotes =
         await NotesDatabaseService.db.getNotesFromDB();
@@ -63,18 +76,6 @@ class _MyHomePageState extends State<MyHomePage> {
             .map((note) =>
                 NoteCardComponent(noteData: note, onTapAction: _openNote))
             .toList(),
-      ),
-    );
-  }
-
-  void _openNote(NotesModel note) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => EditNotePage(
-          existingNote: note,
-          triggerRefetch: setNotesFromDB,
-        ),
       ),
     );
   }
