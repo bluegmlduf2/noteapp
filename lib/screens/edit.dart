@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../data/models.dart';
+import '../data/colors.dart';
 import '../services/database.dart';
 
 class EditNotePage extends StatefulWidget {
@@ -72,9 +73,9 @@ class _EditNotePageState extends State<EditNotePage> {
         child: Column(
           children: [
             TextField(
+              style: Theme.of(context).textTheme.bodyMedium,
               controller: contentController,
               decoration: InputDecoration(
-                border: OutlineInputBorder(),
                 hintText: 'Enter Content',
               ),
               keyboardType: TextInputType.multiline,
@@ -89,16 +90,16 @@ class _EditNotePageState extends State<EditNotePage> {
                 if (widget.existingNote != null)
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
-                      foregroundColor: Colors.white,
+                      backgroundColor: red1,
+                      foregroundColor: white1,
                     ),
                     onPressed: _deleteNote,
                     child: const Text('Delete'),
                   ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                    foregroundColor: Colors.white,
+                    backgroundColor: blue1,
+                    foregroundColor: white1,
                   ),
                   onPressed: _saveNote,
                   child: const Text('Save'),
