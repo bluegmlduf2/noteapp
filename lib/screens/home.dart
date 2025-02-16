@@ -3,6 +3,7 @@ import '../component/cards.dart';
 import '../screens/edit.dart';
 import '../services/database.dart';
 import '../data/models.dart';
+import '../data/colors.dart';
 import 'settings.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -49,10 +50,20 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Notes'),
+        title: const Text(
+          'Notes',
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.settings),
+            icon: const Icon(
+              Icons.settings,
+              color: blue1,
+              size: 20,
+            ),
             onPressed: () => Navigator.push(
               context,
               MaterialPageRoute(

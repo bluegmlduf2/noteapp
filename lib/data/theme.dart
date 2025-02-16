@@ -12,7 +12,7 @@ ThemeData appThemeLight = ThemeData(
   floatingActionButtonTheme: FloatingActionButtonThemeData(
       backgroundColor: blue1, // 배경 색상: 파랑
       foregroundColor: white1), // 플로팅 버튼 색상
-  textTheme: const TextTheme(bodyMedium: TextStyle(fontSize: 16)),
+  textTheme: const TextTheme(bodyMedium: TextStyle(fontSize: 12)),
   textSelectionTheme: TextSelectionThemeData(
     cursorColor: blue1, // 커서 색상
   ), // 텍스트인풋선택시색상설정
@@ -29,7 +29,7 @@ ThemeData appThemeLight = ThemeData(
       borderRadius: BorderRadius.circular(12.0), // 둥근 테두리 적용
       borderSide: BorderSide(color: Colors.grey, width: 1.0), // 기본 테두리 색상
     ),
-    hintStyle: TextStyle(color: gray1), // 플레이스홀더 색상 변경
+    hintStyle: TextStyle(color: gray2), // 플레이스홀더 색상 변경
   ), // 텍스트인풋설정
 );
 

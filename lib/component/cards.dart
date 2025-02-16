@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:note_app/data/colors.dart';
 import '../data/models.dart';
 
 class NoteCardComponent extends StatelessWidget {
@@ -11,40 +12,46 @@ class NoteCardComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String neatDate = DateFormat.yMd().add_jm().format(noteData.date);
+    String createdDate = DateFormat('yyyy/MM/dd hh:mm a').format(noteData.date);
+
     return GestureDetector(
       onTap: () => onTapAction(noteData),
       child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        elevation: 4,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        color: blue2,
         margin: const EdgeInsets.all(10),
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(20),
+          // padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                noteData.title.length <= 20
+                noteData.title.length <= 30
                     ? noteData.title
-                    : '${noteData.title.substring(0, 20)}...',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                    : '${noteData.title.substring(0, 30)}...',
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 4),
               Text(
-                noteData.content.split('\n').first.length <= 30
+                // noteData.content,
+                noteData.content.split('\n').first.length <= 40
                     ? noteData.content.split('\n').first
-                    : '${noteData.content.split('\n').first.substring(0, 30)}...',
-                style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
+                    : '${noteData.content.split('\n').first.substring(0, 130)}...',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: textgray1,
+                ),
               ),
               const SizedBox(height: 14),
               Align(
                 alignment: Alignment.bottomRight,
                 child: Text(
-                  neatDate,
+                  createdDate,
                   style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey.shade400,
-                      fontWeight: FontWeight.w500),
+                    fontSize: 12,
+                    color: textgray1,
+                  ),
                 ),
               )
             ],
@@ -52,16 +59,5 @@ class NoteCardComponent extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Color _getColor(String title) {
-    final List<Color> colorList = [
-      Colors.blue,
-      Colors.green,
-      Colors.red,
-      Colors.orange,
-      Colors.teal
-    ];
-    return colorList[title.length % colorList.length];
   }
 }

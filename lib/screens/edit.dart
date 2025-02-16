@@ -19,6 +19,7 @@ class EditNotePage extends StatefulWidget {
 
 class _EditNotePageState extends State<EditNotePage> {
   late NotesModel currentNote;
+  late TextEditingController titleController;
   late TextEditingController contentController;
 
   @override
@@ -32,15 +33,17 @@ class _EditNotePageState extends State<EditNotePage> {
           date: DateTime.now(),
         );
 
+    titleController = TextEditingController(text: currentNote.title);
     contentController = TextEditingController(text: currentNote.content);
   }
 
   void _saveNote() async {
-    if (contentController.text.isEmpty) {
+    if (titleController.text.isEmpty) {
       return;
     }
     // 저장한 메모의 상태저장
     setState(() {
+      currentNote.title = titleController.text;
       currentNote.content = contentController.text;
     });
 
@@ -67,21 +70,65 @@ class _EditNotePageState extends State<EditNotePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Edit Note')),
+      appBar: AppBar(
+        title: const Text(
+          'Edit Note',
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back_ios,
+            color: blue1,
+            size: 20,
+          ), // iOS 스타일의 뒤로가기 아이콘
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            TextField(
-              style: Theme.of(context).textTheme.bodyMedium,
-              controller: contentController,
-              decoration: InputDecoration(
-                hintText: 'Enter Content',
+            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text(
+                "Title",
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-              keyboardType: TextInputType.multiline,
-              minLines: 3,
-              maxLines: 10,
-            ),
+              const SizedBox(height: 8),
+              TextField(
+                style: Theme.of(context).textTheme.bodyMedium,
+                controller: titleController,
+                decoration: InputDecoration(
+                  hintText: 'Enter Title',
+                ),
+              ),
+            ]),
+            const SizedBox(height: 20),
+            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text(
+                "Content",
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 8),
+              TextField(
+                style: Theme.of(context).textTheme.bodyMedium,
+                controller: contentController,
+                decoration: InputDecoration(
+                  hintText: 'Enter Content',
+                ),
+                keyboardType: TextInputType.multiline,
+                minLines: 3,
+                maxLines: 10,
+              ),
+            ]),
             const SizedBox(height: 16),
             Wrap(
               spacing: 16,
@@ -92,15 +139,20 @@ class _EditNotePageState extends State<EditNotePage> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: red1,
                       foregroundColor: white1,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
                     onPressed: _deleteNote,
                     child: const Text('Delete'),
                   ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: blue1,
-                    foregroundColor: white1,
-                  ),
+                      backgroundColor: blue1,
+                      foregroundColor: white1,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      )),
                   onPressed: _saveNote,
                   child: const Text('Save'),
                 ),
