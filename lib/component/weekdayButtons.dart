@@ -20,7 +20,6 @@ class _WeekdayButtonsState extends State<WeekdayButtons> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           'Weekdays',
@@ -31,7 +30,7 @@ class _WeekdayButtonsState extends State<WeekdayButtons> {
         ),
         SizedBox(height: 10),
         Row(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: _buildWeekdayButtons(),
         ),
       ],

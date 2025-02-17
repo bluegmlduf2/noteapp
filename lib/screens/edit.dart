@@ -154,16 +154,20 @@ class _EditNotePageState extends State<EditNotePage> {
                   children: [
                     Padding(
                         padding: const EdgeInsets.all(16.0),
-                        child: Column(children: [
-                          Row(children: [
-                            TimePicker(label: 'Start time'),
-                            const SizedBox(width: 20),
-                            TimePicker(label: 'End time'),
-                            const SizedBox(width: 20),
-                          ]),
-                          const SizedBox(height: 10),
-                          WeekdayButtons(),
-                        ])),
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  TimePicker(label: 'Start time'),
+                                  TimePicker(label: 'End time'),
+                                ],
+                              ),
+                              const SizedBox(height: 10),
+                              WeekdayButtons(),
+                            ])),
                   ],
                 ),
               ),
