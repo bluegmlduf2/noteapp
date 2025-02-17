@@ -9,11 +9,26 @@ class WeekdayButtons extends StatefulWidget {
 }
 
 class _WeekdayButtonsState extends State<WeekdayButtons> {
-  final List<bool> isSelected = List.generate(7, (index) => false);
+  List<Map<String, dynamic>> list = [
+    {'key': 0, 'name': 'mon', 'isSelected': false},
+    {'key': 1, 'name': 'tue', 'isSelected': false},
+    {'key': 2, 'name': 'wed', 'isSelected': false},
+    {'key': 3, 'name': 'thu', 'isSelected': false},
+    {'key': 4, 'name': 'fri', 'isSelected': false},
+    {'key': 5, 'name': 'sat', 'isSelected': false},
+    {'key': 6, 'name': 'sun', 'isSelected': false},
+  ];
 
-  void _toggleSelection(int index) {
+  void _toggleSelection(int key) {
     setState(() {
-      isSelected[index] = !isSelected[index];
+      var item = list.firstWhere(
+        (element) => element['key'] == key,
+        orElse: () => {},
+      );
+
+      if (item.isNotEmpty) {
+        item['isSelected'] = !item['isSelected'];
+      }
     });
   }
 
@@ -39,16 +54,16 @@ class _WeekdayButtonsState extends State<WeekdayButtons> {
   }
 
   List<Widget> _buildWeekdayButtons() {
-    return List.generate(7, (index) {
+    return list.map((weekday) {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 5),
         child: WeekdayButton(
-          label: "${index + 1}",
-          isSelected: isSelected[index],
-          onTap: () => _toggleSelection(index),
+          label: "${weekday['name']}",
+          isSelected: weekday['isSelected'],
+          onTap: () => _toggleSelection(weekday['key']),
         ),
       );
-    });
+    }).toList();
   }
 }
 
@@ -69,13 +84,14 @@ class WeekdayButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: CircleAvatar(
-        radius: 15,
+        radius: 17,
         backgroundColor: isSelected ? blue1 : gray2,
         child: Text(
           label,
+          textAlign: TextAlign.center,
           style: TextStyle(
             color: Colors.white,
-            fontSize: 16,
+            fontSize: 12,
             fontWeight: FontWeight.bold,
           ),
         ),
