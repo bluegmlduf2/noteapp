@@ -34,10 +34,7 @@ class NoteCardComponent extends StatelessWidget {
               ),
               const SizedBox(height: 4),
               Text(
-                // noteData.content,
-                noteData.content.split('\n').first.length <= 40
-                    ? noteData.content.split('\n').first
-                    : '${noteData.content.split('\n').first.substring(0, 130)}...',
+                noteData.content,
                 style: TextStyle(
                   fontSize: 12,
                   color: textgray1,

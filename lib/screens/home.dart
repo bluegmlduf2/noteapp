@@ -83,7 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: const Icon(Icons.add),
       ),
       body: ListView(
-        children: notesList
+        children: notesList.reversed
             .map((note) =>
                 NoteCardComponent(noteData: note, onTapAction: _openNote))
             .toList(),

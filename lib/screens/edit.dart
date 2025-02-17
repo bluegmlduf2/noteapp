@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../data/models.dart';
 import '../data/colors.dart';
+import '../component/timePicker.dart';
 import '../services/database.dart';
 
 class EditNotePage extends StatefulWidget {
@@ -21,6 +22,7 @@ class _EditNotePageState extends State<EditNotePage> {
   late NotesModel currentNote;
   late TextEditingController titleController;
   late TextEditingController contentController;
+  bool isExpanded = false; // 펼쳐짐 여부 상태
 
   @override
   void initState() {
@@ -87,78 +89,111 @@ class _EditNotePageState extends State<EditNotePage> {
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(
-                "Title",
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Text(
+                  "Title",
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                TextField(
+                  style: Theme.of(context).textTheme.bodyMedium,
+                  controller: titleController,
+                  decoration: InputDecoration(
+                    hintText: 'Enter Title',
+                  ),
+                ),
+              ]),
+              const SizedBox(height: 20),
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Text(
+                  "Content",
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                TextField(
+                  style: Theme.of(context).textTheme.bodyMedium,
+                  controller: contentController,
+                  decoration: InputDecoration(
+                    hintText: 'Enter Content',
+                  ),
+                  keyboardType: TextInputType.multiline,
+                  minLines: 3,
+                  maxLines: null, // 자동 확장
+                ),
+              ]),
+              const SizedBox(height: 20),
+              Card(
+                color: gray1,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: ExpansionTile(
+                  title: Text(
+                    "Timer Setting",
+                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                  ),
+                  shape: Border(),
+                  initiallyExpanded: isExpanded,
+                  onExpansionChanged: (expanded) {
+                    setState(() {
+                      isExpanded = expanded;
+                    });
+                  },
+                  children: [
+                    Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Row(
+                          children: [
+                            TimePicker(label: 'Start time'),
+                            const SizedBox(width: 20),
+                            TimePicker(label: 'End time'),
+                          ],
+                        )),
+                  ],
                 ),
               ),
-              const SizedBox(height: 8),
-              TextField(
-                style: Theme.of(context).textTheme.bodyMedium,
-                controller: titleController,
-                decoration: InputDecoration(
-                  hintText: 'Enter Title',
-                ),
-              ),
-            ]),
-            const SizedBox(height: 20),
-            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(
-                "Content",
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 8),
-              TextField(
-                style: Theme.of(context).textTheme.bodyMedium,
-                controller: contentController,
-                decoration: InputDecoration(
-                  hintText: 'Enter Content',
-                ),
-                keyboardType: TextInputType.multiline,
-                minLines: 3,
-                maxLines: 10,
-              ),
-            ]),
-            const SizedBox(height: 16),
-            Wrap(
-              spacing: 16,
-              alignment: WrapAlignment.center, // 중앙 정렬
-              children: [
-                if (widget.existingNote != null)
+              const SizedBox(height: 20),
+              Wrap(
+                spacing: 16,
+                alignment: WrapAlignment.center, // 중앙 정렬
+                children: [
+                  if (widget.existingNote != null)
+                    OutlinedButton(
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: red1,
+                        side: BorderSide(color: red1, width: 1), // 보더 색상 및 두께
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      onPressed: _deleteNote,
+                      child: const Text('Delete'),
+                    ),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: red1,
-                      foregroundColor: white1,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    onPressed: _deleteNote,
-                    child: const Text('Delete'),
+                        backgroundColor: blue1,
+                        foregroundColor: white1,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        )),
+                    onPressed: _saveNote,
+                    child: const Text('Save'),
                   ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: blue1,
-                      foregroundColor: white1,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      )),
-                  onPressed: _saveNote,
-                  child: const Text('Save'),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
