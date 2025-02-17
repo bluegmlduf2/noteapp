@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../data/models.dart';
 import '../data/colors.dart';
 import '../component/timePicker.dart';
+import '../component/weekdayButtons.dart';
 import '../services/database.dart';
 
 class EditNotePage extends StatefulWidget {
@@ -153,13 +154,16 @@ class _EditNotePageState extends State<EditNotePage> {
                   children: [
                     Padding(
                         padding: const EdgeInsets.all(16.0),
-                        child: Row(
-                          children: [
+                        child: Column(children: [
+                          Row(children: [
                             TimePicker(label: 'Start time'),
                             const SizedBox(width: 20),
                             TimePicker(label: 'End time'),
-                          ],
-                        )),
+                            const SizedBox(width: 20),
+                          ]),
+                          const SizedBox(height: 10),
+                          WeekdayButtons(),
+                        ])),
                   ],
                 ),
               ),

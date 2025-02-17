@@ -38,7 +38,6 @@ class _TimePickerState extends State<TimePicker> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        const SizedBox(height: 10),
         Row(mainAxisAlignment: MainAxisAlignment.start, children: [
           Text(
             '${selectedTime.hour.toString().padLeft(2, "0")}:${selectedTime.minute.toString().padLeft(2, "0")}',
