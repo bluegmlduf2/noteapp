@@ -22,7 +22,7 @@ class NotesDatabaseService {
       version: 1,
       onCreate: (Database db, int version) async {
         await db.execute(
-          'CREATE TABLE Notes (id INTEGER PRIMARY KEY, title TEXT, content TEXT, date TEXT, isImportant INTEGER);',
+          'CREATE TABLE Notes (id INTEGER PRIMARY KEY, title TEXT, content TEXT, date TEXT, startDate TEXT, endDate TEXT, days TEXT, isImportant INTEGER);',
         );
       },
     );
@@ -47,12 +47,8 @@ class NotesDatabaseService {
 
   Future<NotesModel> addNoteInDB(NotesModel newNote) async {
     final db = await database;
-    int id = await db.insert('Notes', {
-      'title': newNote.title,
-      'content': newNote.content,
-      'date': newNote.date.toIso8601String(),
-      'isImportant': newNote.isImportant ? 1 : 0
-    });
+    int id = await db.insert('Notes', newNote.toMap());
+    newNote.id = id;
     return newNote;
   }
 }

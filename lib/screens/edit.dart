@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../data/models.dart';
 import '../data/colors.dart';
 import '../component/timePicker.dart';
-import '../component/weekdayButtons.dart';
+import '../component/dayButtons.dart';
 import '../services/database.dart';
 
 class EditNotePage extends StatefulWidget {
@@ -30,11 +30,13 @@ class _EditNotePageState extends State<EditNotePage> {
     super.initState();
     currentNote = widget.existingNote ??
         NotesModel(
-          title: '',
-          content: '',
-          isImportant: false,
-          date: DateTime.now(),
-        );
+            title: '',
+            content: '',
+            isImportant: false,
+            startDate: null,
+            endDate: null,
+            date: DateTime.now(),
+            days: []);
 
     titleController = TextEditingController(text: currentNote.title);
     contentController = TextEditingController(text: currentNote.content);
@@ -163,7 +165,7 @@ class _EditNotePageState extends State<EditNotePage> {
                             ],
                           ),
                           const SizedBox(height: 10),
-                          WeekdayButtons(),
+                          DayButtons(),
                         ])),
                   ],
                 ),

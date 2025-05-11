@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:note_app/data/colors.dart';
 
-class WeekdayButtons extends StatefulWidget {
-  const WeekdayButtons({super.key});
+class DayButtons extends StatefulWidget {
+  const DayButtons({super.key});
 
   @override
-  _WeekdayButtonsState createState() => _WeekdayButtonsState();
+  DayButtonsState createState() => DayButtonsState();
 }
 
-class _WeekdayButtonsState extends State<WeekdayButtons> {
+class DayButtonsState extends State<DayButtons> {
   List<Map<String, dynamic>> list = [
     {'key': 0, 'name': 'mon', 'isSelected': false},
     {'key': 1, 'name': 'tue', 'isSelected': false},
@@ -38,7 +38,7 @@ class _WeekdayButtonsState extends State<WeekdayButtons> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Weekdays',
+          'week',
           style: TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.bold,
@@ -47,32 +47,32 @@ class _WeekdayButtonsState extends State<WeekdayButtons> {
         SizedBox(height: 14),
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
-          children: _buildWeekdayButtons(),
+          children: _buildDayButtons(),
         ),
       ],
     );
   }
 
-  List<Widget> _buildWeekdayButtons() {
-    return list.map((weekday) {
+  List<Widget> _buildDayButtons() {
+    return list.map((day) {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 5),
-        child: WeekdayButton(
-          label: "${weekday['name']}",
-          isSelected: weekday['isSelected'],
-          onTap: () => _toggleSelection(weekday['key']),
+        child: DayButton(
+          label: "${day['name']}",
+          isSelected: day['isSelected'],
+          onTap: () => _toggleSelection(day['key']),
         ),
       );
     }).toList();
   }
 }
 
-class WeekdayButton extends StatelessWidget {
+class DayButton extends StatelessWidget {
   final String label;
   final bool isSelected;
   final VoidCallback onTap;
 
-  const WeekdayButton({
+  const DayButton({
     super.key,
     required this.label,
     required this.isSelected,
